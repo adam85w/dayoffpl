@@ -1,0 +1,53 @@
+server:
+  port: 8080
+spring:
+  mvc:
+    format:
+      date: dd-MM-yyyy
+
+logging:
+  level:
+    org.springframework: INFO
+    net.adam85w.dayoff: INFO
+
+day-off:
+  rule:
+    saturdays:
+      enabled: true
+    sundays:
+      enabled: true
+    holidays:
+      enabled: true
+      list:
+        - { name: "NEW_YEAR", "day": 1, "month": 1 } # Nowy Rok.
+        - { name: "EPIPHANY", "day": 6, "month": 1 } # Święto Trzech Króli.
+        - { name: "MAY_DAY", "day": 1, "month": 5 } # Święto Pracy.
+        - { name: "CONSTITUTION_DAY", "day": 3, "month": 5 } # Święto Konstytucji 3 Maja.
+        - { name: "ASSUMPTION_DAY", "day": 15, "month": 8 } # Święto Wojska Polskiego, Wniebowzięcie Najświętszej Maryi Panny
+        - { name: "ALL_SAINTS_DAY", "day": 1, "month": 11 } # Wszystkich Świętych
+        - { name: "INDEPENDENCE_DAY", "day": 11, "month": 11 } # Święto Niepodległości
+        - { name: "CHRISTMAS_DAY", "day": 25, "month": 12 } # Boże Narodzenie (dzień pierwszy)
+        - { name: "SECOND_DAY_OF_CHRISTMAS", "day": 26, "month": 12 } # Boże Narodzenie (dzień drugi)
+  translations:
+    # https://en.wikipedia.org/wiki/Public_holidays_in_Poland
+    list:
+      - { name: "SATURDAY", en: "saturday", pl: "sobota" }
+      - { name: "SUNDAY", en: "sunday", pl: "niedziela" }
+      - { name: "NEW_YEAR", en: "New Year's Day", pl: "Nowy Rok" }
+      - { name: "EPIPHANY", en: "Epiphany", pl: "Święto Trzech Króli" }
+      - { name: "EASTER_SUNDAY", en: "Easter Sunday", pl: "Niedziela Wielkanocna" }
+      - { name: "EASTER_MONDAY", en: "Easter Monday", pl: "Poniedziałek Wielkanocny" }
+      - { name: "MAY_DAY", en: "May Day", pl: "Święto Pracy" }
+      - { name: "CONSTITUTION_DAY", en: "Constitution Day", pl: "Święto Konstytucji 3 Maja" }
+      - { name: "PENTECOST_SUNDAY", en: "Pentecost Sunday", pl: "Zielone Świątki" }
+      - { name: "CORPUS_CHRISTI", en: "Corpus Christi", pl: "Boże Ciało" }
+      - { name: "ASSUMPTION_DAY", en: "Assumption Day", pl: "Wniebowzięcie Najświętszej Maryi Panny" }
+      - { name: "ALL_SAINTS_DAY", en: "All Saints' Day", pl: "Wszystkich Świętych" }
+      - { name: "INDEPENDENCE_DAY", en: "Independence Day", pl: "Dzień Niepodległości" }
+      - { name: "CHRISTMAS_DAY", en: "Christmas Day", pl: "Pierwszy dzień Bożego Narodzenia" }
+      - { name: "SECOND_DAY_OF_CHRISTMAS", en: "Second Day of Christmas", pl: "Drugi dzień Bożego Narodzenia" }
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus

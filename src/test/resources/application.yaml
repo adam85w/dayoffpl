@@ -1,0 +1,30 @@
+server:
+  port: 8080
+spring:
+  mvc:
+    format:
+      date: dd-MM-yyyy
+
+logging:
+  level:
+    org.springframework: DEBUG
+    net.adam85w.dayoff: DEBUG
+
+day-off:
+  rule:
+    saturdays:
+      enabled: true
+    sundays:
+      enabled: true
+    holidays:
+      enabled: true
+      list:
+        - { name: "NEW_YEAR", "day": 1, "month": 1 } # Nowy Rok.
+        - { name: "EPIPHANY", "day": 6, "month": 1 } # Święto Trzech Króli.
+  translations:
+    # https://en.wikipedia.org/wiki/Public_holidays_in_Poland
+    list:
+      - { name: "SATURDAY", en: "saturday", pl: "sobota" }
+      - { name: "SUNDAY", en: "sunday", pl: "niedziela" }
+      - { name: "NEW_YEAR", en: "New Year's Day", pl: "Nowy Rok" }
+      - { name: "EASTER_MONDAY", en: "Easter Monday", pl: "Poniedziałek Wielkanocny" }
