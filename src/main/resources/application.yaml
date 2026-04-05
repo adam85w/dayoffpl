@@ -46,6 +46,8 @@ day-off:
       - { name: "INDEPENDENCE_DAY", en: "Independence Day", pl: "Dzień Niepodległości" }
       - { name: "CHRISTMAS_DAY", en: "Christmas Day", pl: "Pierwszy dzień Bożego Narodzenia" }
       - { name: "SECOND_DAY_OF_CHRISTMAS", en: "Second Day of Christmas", pl: "Drugi dzień Bożego Narodzenia" }
+  utils:
+    thread-pool-size: 4
 management:
   endpoints:
     web:

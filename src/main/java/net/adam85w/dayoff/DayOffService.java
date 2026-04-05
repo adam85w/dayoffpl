@@ -3,10 +3,14 @@ package net.adam85w.dayoff;
 import net.adam85w.dayoff.domain.DayOffRule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ForkJoinPool;
+import java.util.stream.Collectors;
 
 @Service
 class DayOffService {
@@ -17,9 +21,12 @@ class DayOffService {
 
     private final DayOffTranslator translator;
 
-    public DayOffService(List<DayOffRule> rules, DayOffTranslator translator) {
+    private final int threadPoolSize;
+
+    public DayOffService(List<DayOffRule> rules, DayOffTranslator translator, @Value("${day-off.utils.thread-pool-size:4}") int threadPoolSize) {
         this.rules = rules;
         this.translator = translator;
+        this.threadPoolSize = threadPoolSize;
     }
 
     public DayOffResult isDayOff(LocalDate day, String lang) {
@@ -34,5 +41,31 @@ class DayOffService {
         }
         LOGGER.info("The day {} is a working day", day);
         return new DayOffResult(day, false);
+    }
+
+    public List<DayOffResult> areDaysOff(List<LocalDate> days, String lang) {
+        if (days.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return days.stream()
+                .peek(day -> LOGGER.info("Checking if day {} is off", day))
+                .map(day -> isDayOff(day, lang)).collect(Collectors.toList());
+    }
+
+    public List<DayOffResult> areDaysOff(LocalDate from, LocalDate to, String lang) {
+        if (from.isAfter(to)) {
+            throw new IllegalArgumentException(String.format("from %s is before to %s", from, to));
+        }
+        try (ForkJoinPool threadPool = new ForkJoinPool(threadPoolSize)) {
+            LOGGER.warn("Start checking dates between {} and {}", from, to);
+            var result = threadPool.submit(() ->
+                    from.datesUntil(to.plusDays(1)).parallel()
+                            .peek(day -> LOGGER.info("Checking if day {} is off", day))
+                            .map(date -> isDayOff(date, lang))
+                            .toList()
+            ).join();
+            LOGGER.warn("Stop checking dates between {} and {}", from, to);
+            return result;
+        }
     }
 }
