@@ -3,6 +3,7 @@ package net.adam85w.dayoff.domain.movableholidays;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ class MovableHolidayCalculator {
 
     private static final Logger LOGGER = LogManager.getLogger(MovableHolidayCalculator.class);
 
+    @Cacheable(value = "movable-holidays")
     public Map<HolidayName, LocalDate> compute(int year) {
         LOGGER.info("Start computing holidays for year={}", year);
         LocalDate easterSunday = computeEasterSunday(year);

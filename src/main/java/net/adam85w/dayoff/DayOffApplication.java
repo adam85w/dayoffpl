@@ -3,6 +3,7 @@ package net.adam85w.dayoff;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cache.annotation.EnableCaching;
 
 /**
  * Day Off
@@ -13,6 +14,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
  */
 @SpringBootApplication
 @ConfigurationPropertiesScan({"net.adam85w.dayoff"})
+@EnableCaching
 public class DayOffApplication {
 
 	public static void main(String[] args) {

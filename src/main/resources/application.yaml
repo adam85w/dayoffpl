@@ -4,6 +4,8 @@ spring:
   mvc:
     format:
       date: dd-MM-yyyy
+  cache:
+    type: simple
 
 logging:
   level:
