@@ -21,11 +21,14 @@ class DayOffService {
 
     private final DayOffTranslator translator;
 
+    private final int yearsLimitation;
+
     private final int threadPoolSize;
 
-    public DayOffService(List<DayOffRule> rules, DayOffTranslator translator, @Value("${day-off.utils.thread-pool-size:4}") int threadPoolSize) {
+    public DayOffService(List<DayOffRule> rules, DayOffTranslator translator, @Value("${day-off.utils.validation.years-limitation:100}") int yearsLimitation, @Value("${day-off.utils.thread-pool-size:4}") int threadPoolSize) {
         this.rules = rules;
         this.translator = translator;
+        this.yearsLimitation = yearsLimitation;
         this.threadPoolSize = threadPoolSize;
     }
 
@@ -54,7 +57,10 @@ class DayOffService {
 
     public List<DayOffResult> areDaysOff(LocalDate from, LocalDate to, String lang) {
         if (from.isAfter(to)) {
-            throw new IllegalArgumentException(String.format("from %s is before to %s", from, to));
+            throw new IllegalArgumentException("Date from cannot be after date to.");
+        }
+        if (!from.plusYears(yearsLimitation).isAfter(to)) {
+            throw new IllegalArgumentException("Years limitation exceeded.");
         }
         try (ForkJoinPool threadPool = new ForkJoinPool(threadPoolSize)) {
             LOGGER.warn("Start checking dates between {} and {}", from, to);

@@ -50,6 +50,8 @@ day-off:
       - { name: "SECOND_DAY_OF_CHRISTMAS", en: "Second Day of Christmas", pl: "Drugi dzień Bożego Narodzenia" }
   utils:
     thread-pool-size: 4
+    validation:
+      years-limitation: 100
 management:
   endpoints:
     web:
